@@ -489,13 +489,17 @@
         NSData *aSessionDownloadTaskResumeData = [anError.userInfo objectForKey:NSURLSessionDownloadTaskResumeData];
         //NSString *aFailingURLStringErrorKeyString = [anError.userInfo objectForKey:NSURLErrorFailingURLStringErrorKey];
         //NSNumber *aBackgroundTaskCancelledReasonKeyNumber = [anError.userInfo objectForKey:NSURLErrorBackgroundTaskCancelledReasonKey];
-        
+
         [self.fileDownloadDelegate downloadFailedWithIdentifier:aTask.taskDescription
                                                           error:anError
                                                      resumeData:aSessionDownloadTaskResumeData];
+        [self.activeDownloadsDictionary removeObjectForKey:@(aTask.taskIdentifier)];
         [self.fileDownloadDelegate decrementNetworkActivityIndicatorActivityCount];
+        self.currentFileDownloadsCount--;
+        [self startNextWaitingDownload];
+    } else {
+        [self.activeDownloadsDictionary removeObjectForKey:@(aTask.taskIdentifier)];
     }
-    [self.activeDownloadsDictionary removeObjectForKey:@(aTask.taskIdentifier)];
 }
 
 
