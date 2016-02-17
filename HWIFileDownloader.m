@@ -419,8 +419,13 @@
     {
         aLocalFileURL = [HWIFileDownloader localFileURLForRemoteURL:[aDownloadTask.originalRequest URL]];
     }
+
+    BOOL aSuccessFlag = NO;
     NSError *anError = nil;
-    BOOL aSuccessFlag = [[NSFileManager defaultManager] moveItemAtURL:aLocation toURL:aLocalFileURL error: &anError];
+    if (aLocalFileURL != nil)
+    {
+        aSuccessFlag = [[NSFileManager defaultManager] moveItemAtURL:aLocation toURL:aLocalFileURL error: &anError];
+    }
     if (aSuccessFlag == NO)
     {
         NSLog(@"ERR: Unable to move file from %@ to %@ (%@) (%s)", aLocation, aLocalFileURL, anError, __PRETTY_FUNCTION__);
